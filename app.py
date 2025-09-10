@@ -112,7 +112,7 @@ except RuntimeError as e:
 if st.session_state.get("fetch_error"):
     trigger_toast(f"❌ Failed to fetch matches: {st.session_state.fetch_error}", "error")
 
-#######################
+######DEBUG CODE TO DELETE######
 
 st.markdown("### Debug: raw scraped times vs parsed times")
 if not df.empty:
@@ -138,7 +138,7 @@ if not df.empty:
 else:
     st.write("No data returned by fetch_matches()")
 
-############################
+############DEBUG CODE TO DELETE END################
 
 # --- Query params ---
 params = st.query_params
@@ -279,6 +279,7 @@ else:
         )
         for row in matches:
             display_match(row)
+
 
 
 
