@@ -117,6 +117,7 @@ def fetch_matches():
     for league, link in LEAGUE_LINKS.items():
         try:
             source = requests.get(link, timeout=10).text
+            print(source)
             page = bs(source, "lxml")
 
             # Extract match times
@@ -225,6 +226,7 @@ def display_match(row):
     </div>
     """
     st.markdown(card_html, unsafe_allow_html=True)
+
 
 
 
