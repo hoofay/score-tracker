@@ -159,7 +159,7 @@ if not selected_matches:
     # Generate shareable link
     if st.button("Generate Shareable Link") and st.session_state.selected_matches_temp:
         params = {"matches": ",".join(st.session_state.selected_matches_temp)}
-        page_url = "http://localhost:8501/"  # Replace with deployed URL
+        page_url = "https://score-tracker.streamlit.app/"  # Replace with deployed URL
         query_string = urllib.parse.urlencode(params)
         shareable_url = f"{page_url}?{query_string}"
 
@@ -248,5 +248,6 @@ else:
         )
         for row in matches:
             display_match(row)
+
 
 
