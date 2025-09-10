@@ -144,7 +144,7 @@ def fetch_matches():
             away_scores = [s[0] if s else "-" for s in scores[1::2]]
 
             # Parse dates
-            parsed = [parse_date(dt) for dt in dateTime]
+            # parsed = [parse_date(dt) for dt in dateTime]
 
             # Append to DataFrame
             df = pd.concat([df, pd.DataFrame({
@@ -225,6 +225,7 @@ def display_match(row):
     </div>
     """
     st.markdown(card_html, unsafe_allow_html=True)
+
 
 
 
