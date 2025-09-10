@@ -191,18 +191,18 @@ if not selected_matches:
                 # ">Copy</button>
             </div>
 
-            <script>
-            const copyBtn = document.getElementById("copyBtn");
-            copyBtn.addEventListener("click", () => {{
-                navigator.clipboard.writeText({shareable_url_js})
-                    .then(() => {{
-                        showToast("✅ Copied to clipboard!", "success");
-                    }})
-                    .catch(() => {{
-                        showToast("❌ Failed to copy", "error");
-                    }});
-            }});
-            </script>
+            # <script>
+            # const copyBtn = document.getElementById("copyBtn");
+            # copyBtn.addEventListener("click", () => {{
+            #     navigator.clipboard.writeText({shareable_url_js})
+            #         .then(() => {{
+            #             showToast("✅ Copied to clipboard!", "success");
+            #         }})
+            #         .catch(() => {{
+            #             showToast("❌ Failed to copy", "error");
+            #         }});
+            # }});
+            # </script>
         """, unsafe_allow_html=True)
 
 # --- Display Mode ---
@@ -258,6 +258,7 @@ else:
         )
         for row in matches:
             display_match(row)
+
 
 
 
