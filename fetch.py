@@ -181,8 +181,16 @@ def get_status(row):
     else:
         return "Upcoming", "⚪"
 
+# def build_match_id(row):
+#     return f"{row.Home}-vs-{row.Away}_{row.Date_Time}_{row.Competition}"
+
+# --- Build match_id using ParsedDate instead of Date_Time ---
 def build_match_id(row):
-    return f"{row.Home}-vs-{row.Away}_{row.Date_Time}_{row.Competition}"
+    """
+    Stable match identifier using Home-Away, ISO formatted ParsedDate, Competition
+    """
+    dt_str = row.ParsedDate.isoformat() if pd.notna(row.ParsedDate) else "TBD"
+    return f"{row.Home}-vs-{row.Away}_{dt_str}_{row.Competition}"
 
 def trigger_toast(message: str, toast_type: str = "info"):
     st.markdown(
@@ -211,3 +219,4 @@ def display_match(row):
     </div>
     """
     st.markdown(card_html, unsafe_allow_html=True)
+
