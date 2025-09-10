@@ -133,7 +133,7 @@ if not selected_matches:
     st.header("Select Matches to Track")
     st.info("Pick up to 10 upcoming matches to track from the following list")
 
-    today = datetime.today()
+    today = datetime.now(uk_tz)
     cutoff = today + timedelta(days=4)
 
     candidates = df[(df["ParsedDate"].notna()) & (df["ParsedDate"] <= cutoff)]
@@ -251,6 +251,7 @@ else:
         )
         for row in matches:
             display_match(row)
+
 
 
 
