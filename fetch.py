@@ -154,7 +154,7 @@ def fetch_matches():
                 "Away": away,
                 "HG": home_scores,
                 "AG": away_scores,
-                "Date_Time": dateTime,
+                "Date_Time": date_texts,
                 "ParsedDate": date_parsed
             })], ignore_index=True)
 
@@ -226,6 +226,7 @@ def display_match(row):
     </div>
     """
     st.markdown(card_html, unsafe_allow_html=True)
+
 
 
 
