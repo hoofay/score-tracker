@@ -140,6 +140,7 @@ def trigger_toast(message: str, toast_type: str = "info"):
 # --- Display match as styled card ---
 def display_match(row):
     status, emoji = get_status(row)
+    time_str = row.ParsedDate.astimezone(uk_tz).strftime("%b %d, %H:%M") if row.ParsedDate else row.Date_Time
     card_html = f"""
     <div class="match-card">
         <div style='display:flex; justify-content:space-between; align-items:center;'>
@@ -147,13 +148,14 @@ def display_match(row):
             <div style='text-align:center; flex:1;'>
                 <div class='score'>{row.HG} - {row.AG}</div>
                 <div class='status'>{emoji} {status}</div>
-                <div class='time'>{row.Date_Time}</div>
+                <div class='time'>{time_str}</div>
             </div>
             <div class='team' style='text-align:left;'>{row.Away}</div>
         </div>
     </div>
     """
     st.markdown(card_html, unsafe_allow_html=True)
+
 
 
 
