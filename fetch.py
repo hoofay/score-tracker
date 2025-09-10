@@ -14,13 +14,10 @@ LEAGUE_LINKS = {
 
 
 def parse_date(date_str: str):
-    """
-    Try to parse fixture date string into a datetime.
-    If the string looks like live status ('23'', 'Half time', 'FT'), return None.
-    """
     if re.search(r"'|Half time|FT", date_str, re.IGNORECASE):
         return None
     try:
+        # Parse but keep naive datetime (interpreted literally)
         return datetime.strptime(date_str.strip(), "%d/%m/%Y%H:%M")
     except Exception:
         return None
@@ -122,3 +119,4 @@ def display_match(row):
     </div>
     """
     st.markdown(card_html, unsafe_allow_html=True)
+
