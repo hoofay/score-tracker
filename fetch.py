@@ -24,25 +24,19 @@ import re
 uk_tz = pytz.timezone("Europe/London")
 
 def parse_date(date_str: str):
-    """
-    Parse a scraped date/time string and return a timezone-aware datetime in Europe/London.
-    Returns None for live/FT markers.
-    Uses dateutil for robustness (handles many formats).
-    """
+    """Parse a scraped date/time string into Europe/London tz."""
     if not date_str or re.search(r"'|Half time|FT|Live", date_str, re.IGNORECASE):
         return None
-
     try:
-        # dateutil is forgiving: dayfirst=True so "31/08/2025" is parsed correctly
-        dt = dtparser.parse(date_str, dayfirst=True, fuzzy=True)
+        # Fix formatting issue: ensure space between date and time
+        fixed = re.sub(r"^(\d{2}/\d{2}/\d{4})(\d{2}:\d{2})$", r"\1 \2", date_str.strip())
+        dt = dtparser.parse(fixed, dayfirst=True)
     except Exception:
         return None
 
-    # If parsed dt has no tzinfo, localize it to UK time.
     if dt.tzinfo is None:
         dt = uk_tz.localize(dt)
     else:
-        # If it has tzinfo, convert to UK time
         dt = dt.astimezone(uk_tz)
 
     return dt
@@ -160,6 +154,7 @@ def display_match(row):
     </div>
     """
     st.markdown(card_html, unsafe_allow_html=True)
+
 
 
 
