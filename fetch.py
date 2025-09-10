@@ -4,6 +4,7 @@ import pandas as pd
 from datetime import datetime
 import re
 import streamlit as st
+import pytz
 
 LEAGUE_LINKS = {
     "Premier League": "https://onefootball.com/en/competition/premier-league-9/fixtures",
@@ -12,16 +13,20 @@ LEAGUE_LINKS = {
     "League 2": "https://onefootball.com/en/competition/efl-league-two-43/fixtures"
 }
 
+uk_tz = pytz.timezone("Europe/London")
 
 def parse_date(date_str: str):
+    """
+    Parse fixture date string into a timezone-aware datetime (UK time).
+    """
     if re.search(r"'|Half time|FT", date_str, re.IGNORECASE):
         return None
     try:
-        # Parse but keep naive datetime (interpreted literally)
-        return datetime.strptime(date_str.strip(), "%d/%m/%Y%H:%M")
+        naive = datetime.strptime(date_str.strip(), "%d/%m/%Y%H:%M")
+        aware = uk_tz.localize(naive)  # lock it to UK time
+        return aware
     except Exception:
         return None
-
 
 def fetch_matches():
     """
@@ -119,4 +124,5 @@ def display_match(row):
     </div>
     """
     st.markdown(card_html, unsafe_allow_html=True)
+
 
