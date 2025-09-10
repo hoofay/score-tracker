@@ -16,15 +16,12 @@ LEAGUE_LINKS = {
 uk_tz = pytz.timezone("Europe/London")
 
 def parse_date(date_str: str):
-    """
-    Parse fixture date string into a timezone-aware datetime (UK time).
-    """
+    """Parse fixture date string into a timezone-aware datetime (UK time)."""
     if re.search(r"'|Half time|FT", date_str, re.IGNORECASE):
         return None
     try:
         naive = datetime.strptime(date_str.strip(), "%d/%m/%Y%H:%M")
-        aware = uk_tz.localize(naive)  # lock it to UK time
-        return aware
+        return uk_tz.localize(naive)  # force UK timezone
     except Exception:
         return None
 
@@ -124,5 +121,6 @@ def display_match(row):
     </div>
     """
     st.markdown(card_html, unsafe_allow_html=True)
+
 
 
