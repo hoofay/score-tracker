@@ -112,34 +112,6 @@ except RuntimeError as e:
 if st.session_state.get("fetch_error"):
     trigger_toast(f"❌ Failed to fetch matches: {st.session_state.fetch_error}", "error")
 
-######DEBUG CODE TO DELETE######
-
-st.markdown("### Debug: raw scraped times vs parsed times")
-if not df.empty:
-    dbg = df[['Competition', 'Date_Time', 'ParsedDate']].head(20).copy()
-
-    # show string repr, ISO, tz and UTC equivalent for inspection
-    def iso_and_tz(x):
-        if pd.isna(x):
-            return {"iso": None, "tz": None, "utc_iso": None}
-        try:
-            iso = x.isoformat()
-            tz = getattr(x, "tzinfo", None)
-            utc_iso = x.astimezone(pytz.UTC).isoformat()
-            return {"iso": iso, "tz": str(tz), "utc_iso": utc_iso}
-        except Exception as e:
-            return {"iso": str(x), "tz": "ERR", "utc_iso": "ERR"}
-
-    dbg['ParsedMeta'] = dbg['ParsedDate'].apply(iso_and_tz)
-    # flatten for table view
-    dbg = pd.concat([dbg.drop(columns=['ParsedDate','ParsedMeta']),
-                     pd.json_normalize(dbg['ParsedMeta'])], axis=1)
-    st.dataframe(dbg)
-else:
-    st.write("No data returned by fetch_matches()")
-
-############DEBUG CODE TO DELETE END################
-
 # --- Query params ---
 params = st.query_params
 selected_matches = params.get("matches", [])
@@ -279,6 +251,7 @@ else:
         )
         for row in matches:
             display_match(row)
+
 
 
 
