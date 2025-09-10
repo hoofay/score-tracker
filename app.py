@@ -111,7 +111,7 @@ if st.session_state.get("fetch_error"):
 
 
 # --- Query params ---
-params = st.experimental_get_query_params()
+params = st.query_params()
 selected_matches = params.get("matches", [])
 
 if selected_matches:
@@ -248,3 +248,4 @@ else:
         )
         for row in matches:
             display_match(row)
+
