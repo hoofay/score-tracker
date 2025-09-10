@@ -1,1 +1,6 @@
-
+[theme]
+primaryColor="#3b82f6"             # blue accents
+backgroundColor="#111827"          # dark background
+secondaryBackgroundColor="#1f2937" # panel color
+textColor="#f9fafb"                # white text
+font="sans serif"
