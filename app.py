@@ -181,28 +181,7 @@ if not selected_matches:
                     font-weight:600; 
                     text-decoration:none;
                     ">🔗 Open Shareable Link</a>
-                # <button id="copyBtn" style="
-                #     background:#2563eb;
-                #     color:white;
-                #     border:none;
-                #     border-radius:0.5rem;
-                #     padding:0.25rem 0.75rem;
-                #     cursor:pointer;
-                # ">Copy</button>
             </div>
-
-            # <script>
-            # const copyBtn = document.getElementById("copyBtn");
-            # copyBtn.addEventListener("click", () => {{
-            #     navigator.clipboard.writeText({shareable_url_js})
-            #         .then(() => {{
-            #             showToast("✅ Copied to clipboard!", "success");
-            #         }})
-            #         .catch(() => {{
-            #             showToast("❌ Failed to copy", "error");
-            #         }});
-            # }});
-            # </script>
         """, unsafe_allow_html=True)
 
 # --- Display Mode ---
@@ -258,6 +237,7 @@ else:
         )
         for row in matches:
             display_match(row)
+
 
 
 
