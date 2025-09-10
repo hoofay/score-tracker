@@ -181,14 +181,14 @@ if not selected_matches:
                     font-weight:600; 
                     text-decoration:none;
                     ">🔗 Open Shareable Link</a>
-                <button id="copyBtn" style="
-                    background:#2563eb;
-                    color:white;
-                    border:none;
-                    border-radius:0.5rem;
-                    padding:0.25rem 0.75rem;
-                    cursor:pointer;
-                ">Copy</button>
+                # <button id="copyBtn" style="
+                #     background:#2563eb;
+                #     color:white;
+                #     border:none;
+                #     border-radius:0.5rem;
+                #     padding:0.25rem 0.75rem;
+                #     cursor:pointer;
+                # ">Copy</button>
             </div>
 
             <script>
@@ -258,6 +258,7 @@ else:
         )
         for row in matches:
             display_match(row)
+
 
 
 
