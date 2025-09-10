@@ -15,15 +15,38 @@ LEAGUE_LINKS = {
 
 uk_tz = pytz.timezone("Europe/London")
 
+# fetch.py (replace parse_date)
+from datetime import datetime
+from dateutil import parser as dtparser
+import pytz
+import re
+
+uk_tz = pytz.timezone("Europe/London")
+
 def parse_date(date_str: str):
-    """Parse fixture date string into a timezone-aware datetime (UK time)."""
-    if re.search(r"'|Half time|FT", date_str, re.IGNORECASE):
+    """
+    Parse a scraped date/time string and return a timezone-aware datetime in Europe/London.
+    Returns None for live/FT markers.
+    Uses dateutil for robustness (handles many formats).
+    """
+    if not date_str or re.search(r"'|Half time|FT|Live", date_str, re.IGNORECASE):
         return None
+
     try:
-        naive = datetime.strptime(date_str.strip(), "%d/%m/%Y%H:%M")
-        return uk_tz.localize(naive)  # force UK timezone
+        # dateutil is forgiving: dayfirst=True so "31/08/2025" is parsed correctly
+        dt = dtparser.parse(date_str, dayfirst=True, fuzzy=True)
     except Exception:
         return None
+
+    # If parsed dt has no tzinfo, localize it to UK time.
+    if dt.tzinfo is None:
+        dt = uk_tz.localize(dt)
+    else:
+        # If it has tzinfo, convert to UK time
+        dt = dt.astimezone(uk_tz)
+
+    return dt
+
 
 def fetch_matches():
     """
@@ -121,6 +144,7 @@ def display_match(row):
     </div>
     """
     st.markdown(card_html, unsafe_allow_html=True)
+
 
 
 
