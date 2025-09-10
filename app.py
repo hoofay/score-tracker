@@ -117,7 +117,7 @@ params = st.query_params
 selected_matches = params.get("matches", [])
 
 if selected_matches:
-    selected_matches = selected_matches[0].split(",")
+    selected_matches = selected_matches.split(",")
 
 # --- Initialize session state ---
 if 'selected_matches_temp' not in st.session_state:
@@ -258,6 +258,7 @@ else:
         )
         for row in matches:
             display_match(row)
+
 
 
 
