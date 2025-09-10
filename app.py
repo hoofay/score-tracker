@@ -213,7 +213,6 @@ else:
         st_autorefresh(interval=60000, key="refresh")
 
     display_rows = []
-    st.write(st.session_state.selected_matches_temp)
     for match_id in st.session_state.selected_matches_temp:
         try:
             parts = match_id.split("_")
@@ -258,6 +257,7 @@ else:
         )
         for row in matches:
             display_match(row)
+
 
 
 
