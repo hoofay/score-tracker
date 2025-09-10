@@ -136,7 +136,18 @@ if not selected_matches:
     cutoff_max = today + timedelta(days=4)
     cutoff_min = today - timedelta(days=1)
     
+    # Checkbox to filter only 3 PM Saturday matches
+    filter_3pm_saturday = st.checkbox("Only show matches at 3 PM on Saturdays", value=False)
+    
     candidates = df[(df["ParsedDate"].notna()) & (df["ParsedDate"] <= cutoff_max) & (df["ParsedDate"] >= cutoff_min)]
+    
+    if filter_3pm_saturday:
+        # Filter to matches on Saturday at 15:00
+        candidates = candidates[
+            (candidates["ParsedDate"].dt.weekday == 5) &  # Saturday (0=Monday)
+            (candidates["ParsedDate"].dt.hour == 15)      # 3 PM
+        ]
+    
     candidates = candidates.sort_values("ParsedDate")
     
     # Build human-readable labels + mapping to match IDs
@@ -237,6 +248,7 @@ else:
         )
         for row in matches:
             display_match(row)
+
 
 
 
