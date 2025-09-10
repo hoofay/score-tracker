@@ -144,7 +144,7 @@ if not selected_matches:
     options = []
     for _, row in candidates.iterrows():
         match_id = build_match_id(row)
-        date_str = row.ParsedDate.strftime("%b %d, %H:%M") if row.ParsedDate else "TBD"
+        date_str = row.ParsedDate.astimezone(uk_tz).strftime("%b %d, %H:%M") if row.ParsedDate else "TBD"
         label = f"{row.Home} vs {row.Away} | {date_str} | {row.Competition}"
         options.append(label)
         label_to_id[label] = match_id
@@ -251,6 +251,7 @@ else:
         )
         for row in matches:
             display_match(row)
+
 
 
 
