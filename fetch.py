@@ -99,6 +99,22 @@ def fetch_matches():
     if errors:
         raise RuntimeError(" | ".join(errors))
 
+    # convert None -> pd.NaT, then to datetime
+    df['ParsedDate'] = pd.to_datetime(df['ParsedDate'], errors='coerce')
+    
+    # If tz-naive -> localize; if tz-aware -> convert to Europe/London
+    try:
+        current_tz = df['ParsedDate'].dt.tz
+    except Exception:
+        current_tz = None
+    
+    if current_tz is None:
+        # tz-naive, localize
+        df['ParsedDate'] = df['ParsedDate'].dt.tz_localize('Europe/London')
+    else:
+        # tz-aware, convert to London (this also handles UTC -> Europe/London)
+        df['ParsedDate'] = df['ParsedDate'].dt.tz_convert('Europe/London')
+
     return df
 
 
@@ -144,6 +160,7 @@ def display_match(row):
     </div>
     """
     st.markdown(card_html, unsafe_allow_html=True)
+
 
 
 
