@@ -213,11 +213,10 @@ else:
         st_autorefresh(interval=60000, key="refresh")
 
     display_rows = []
+    st.write(st.session_state.selected_matches_temp)
     for match_id in st.session_state.selected_matches_temp:
         try:
-            print('here')
             parts = match_id.split("_")
-            print(parts)
             if len(parts) < 3:
                 trigger_toast(f"⚠️ Invalid match ID skipped: {match_id}", "error")
                 continue
@@ -259,6 +258,7 @@ else:
         )
         for row in matches:
             display_match(row)
+
 
 
 
