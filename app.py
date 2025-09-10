@@ -112,6 +112,33 @@ except RuntimeError as e:
 if st.session_state.get("fetch_error"):
     trigger_toast(f"❌ Failed to fetch matches: {st.session_state.fetch_error}", "error")
 
+#######################
+
+st.markdown("### Debug: raw scraped times vs parsed times")
+if not df.empty:
+    dbg = df[['Competition', 'Date_Time', 'ParsedDate']].head(20).copy()
+
+    # show string repr, ISO, tz and UTC equivalent for inspection
+    def iso_and_tz(x):
+        if pd.isna(x):
+            return {"iso": None, "tz": None, "utc_iso": None}
+        try:
+            iso = x.isoformat()
+            tz = getattr(x, "tzinfo", None)
+            utc_iso = x.astimezone(pytz.UTC).isoformat()
+            return {"iso": iso, "tz": str(tz), "utc_iso": utc_iso}
+        except Exception as e:
+            return {"iso": str(x), "tz": "ERR", "utc_iso": "ERR"}
+
+    dbg['ParsedMeta'] = dbg['ParsedDate'].apply(iso_and_tz)
+    # flatten for table view
+    dbg = pd.concat([dbg.drop(columns=['ParsedDate','ParsedMeta']),
+                     pd.json_normalize(dbg['ParsedMeta'])], axis=1)
+    st.dataframe(dbg)
+else:
+    st.write("No data returned by fetch_matches()")
+
+############################
 
 # --- Query params ---
 params = st.query_params
@@ -144,7 +171,8 @@ if not selected_matches:
     options = []
     for _, row in candidates.iterrows():
         match_id = build_match_id(row)
-        date_str = row.ParsedDate.astimezone(uk_tz).strftime("%b %d, %H:%M") if row.ParsedDate else "TBD"
+        # when building label/date_str
+        date_str = row.ParsedDate.astimezone(uk_tz).strftime("%b %d, %H:%M") if pd.notna(row.ParsedDate) else "TBD"
         label = f"{row.Home} vs {row.Away} | {date_str} | {row.Competition}"
         options.append(label)
         label_to_id[label] = match_id
@@ -251,6 +279,7 @@ else:
         )
         for row in matches:
             display_match(row)
+
 
 
 
