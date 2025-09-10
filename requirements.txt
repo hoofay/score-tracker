@@ -1,0 +1,6 @@
+streamlit
+streamlit-autorefresh
+requests
+beautifulsoup4
+lxml
+pandas
