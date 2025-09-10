@@ -220,12 +220,18 @@ else:
                 trigger_toast(f"⚠️ Invalid match ID skipped: {match_id}", "error")
                 continue
             home, away = parts[0].split("-vs-")
-            date_time, comp = parts[1], parts[2]
-
+            parsed_date_str, comp = parts[1], parts[2]
+    
+            # convert back to datetime
+            try:
+                parsed_date = pd.to_datetime(parsed_date_str)
+            except Exception:
+                parsed_date = None
+    
             match = df[
                 (df.Home == home) &
                 (df.Away == away) &
-                (df.Date_Time == date_time) &
+                (df.ParsedDate == parsed_date) &
                 (df.Competition == comp)
             ]
 
@@ -233,7 +239,7 @@ else:
                 display_rows.append(match.iloc[0])
             else:
                 trigger_toast(f"⚠️ Match not found: {match_id}", "error")
-
+    
         except Exception:
             trigger_toast(f"❌ Error parsing {match_id}", "error")
 
@@ -251,6 +257,7 @@ else:
         )
         for row in matches:
             display_match(row)
+
 
 
 
