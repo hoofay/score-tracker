@@ -133,9 +133,10 @@ if not selected_matches:
     st.info("Pick up to 10 upcoming matches to track from the following list")
 
     today = datetime.now(uk_tz)
-    cutoff = today + timedelta(days=4)
-
-    candidates = df[(df["ParsedDate"].notna()) & (df["ParsedDate"] <= cutoff)]
+    cutoff_max = today + timedelta(days=4)
+    cutoff_min = today - timedelta(days=1)
+    
+    candidates = df[(df["ParsedDate"].notna()) & (df["ParsedDate"] <= cutoff_max) & (df["ParsedDate"] >= cutoff_min)]
     candidates = candidates.sort_values("ParsedDate")
     
     # Build human-readable labels + mapping to match IDs
@@ -257,6 +258,7 @@ else:
         )
         for row in matches:
             display_match(row)
+
 
 
 
