@@ -215,6 +215,7 @@ else:
     display_rows = []
     for match_id in st.session_state.selected_matches_temp:
         try:
+            print('here')
             parts = match_id.split("_")
             print(parts)
             if len(parts) < 3:
@@ -258,6 +259,7 @@ else:
         )
         for row in matches:
             display_match(row)
+
 
 
 
