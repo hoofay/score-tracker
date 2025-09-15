@@ -144,7 +144,7 @@ if not selected_matches:
     st.info("Pick up to 10 upcoming matches to track from the following list")
 
     today = datetime.now(uk_tz)
-    cutoff_max = today + timedelta(days=4)
+    cutoff_max = today + timedelta(days=7)
     cutoff_min = today - timedelta(days=1)
     
     # Checkbox to filter only 3 PM Saturday matches
@@ -255,6 +255,7 @@ else:
         )
         for row in matches:
             display_match(row)
+
 
 
 
