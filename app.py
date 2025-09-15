@@ -1,5 +1,5 @@
 import streamlit as st
-from fetch import fetch_matches, get_status, build_match_id, LEAGUE_LINKS, display_match
+from fetch import fetch_matches, get_status, build_match_id, FIXTURE_LINKS, RESULT_LINKS, display_match
 from streamlit_autorefresh import st_autorefresh
 from datetime import datetime, timedelta
 from collections import defaultdict
@@ -105,20 +105,6 @@ st.markdown("""
 
 from fetch import trigger_toast
 
-# --- Load all matches with error handling ---
-try:
-    df = fetch_matches()
-    if st.session_state.get("fetch_error"):
-        trigger_toast("✅ Data source recovered", "success")
-    st.session_state.fetch_error = None
-except RuntimeError as e:
-    df = pd.DataFrame(columns=["Competition", "Home", "Away", "HG", "AG", "Date_Time", "ParsedDate"])
-    st.session_state.fetch_error = str(e)
-
-# --- Show persistent error toast after each refresh if scraping failed ---
-if st.session_state.get("fetch_error"):
-    trigger_toast(f"❌ Failed to fetch matches: {st.session_state.fetch_error}", "error")
-
 # --- Query params ---
 params = st.query_params
 selected_matches = params.get("matches", [])
@@ -136,6 +122,24 @@ if 'selected_matches_temp' not in st.session_state:
 
 # --- Selection Mode ---
 if not selected_matches:
+
+    # --- Load all matches with error handling ---
+    try:
+        if 'df' not in st.session_state:
+            st.session_state.df = fetch_matches(FIXTURE_LINKS)
+        
+        if st.session_state.get("fetch_error"):
+            trigger_toast("✅ Data source recovered", "success")
+        
+        st.session_state.fetch_error = None
+    except RuntimeError as e:
+        st.session_state.df = pd.DataFrame(columns=["Competition", "Home", "Away", "HG", "AG", "Date_Time", "ParsedDate"])
+        st.session_state.fetch_error = str(e)
+
+    # --- Show persistent error toast after each refresh if scraping failed ---
+    if st.session_state.get("fetch_error"):
+        trigger_toast(f"❌ Failed to fetch matches: {st.session_state.fetch_error}", "error")
+
     st.header("Select Matches to Track")
     st.info("Pick up to 10 upcoming matches to track from the following list")
 
@@ -146,7 +150,7 @@ if not selected_matches:
     # Checkbox to filter only 3 PM Saturday matches
     filter_3pm_saturday = st.checkbox("Only show matches at 3 PM on Saturdays", value=False)
     
-    candidates = df[(df["ParsedDate"].notna()) & (df["ParsedDate"] <= cutoff_max) & (df["ParsedDate"] >= cutoff_min)]
+    candidates = st.session_state.df[(st.session_state.df["ParsedDate"].notna()) & (st.session_state.df["ParsedDate"] <= cutoff_max) & (st.session_state.df["ParsedDate"] >= cutoff_min)]
     
     if filter_3pm_saturday:
         # Filter to matches on Saturday at 15:00
@@ -210,6 +214,11 @@ else:
     if auto_refresh:
         st_autorefresh(interval=60000, key="refresh")
 
+    df1 = fetch_matches(FIXTURE_LINKS)
+    df2 = fetch_matches(RESULTS_LINKS)
+    results_df = pd.concat([df1, df2])
+    results_df = result_df.drop_duplicates(subset=['home', 'away'], keep='first')
+
     display_rows = []
     for match_id in st.session_state.selected_matches_temp:
         try:
@@ -218,19 +227,10 @@ else:
                 trigger_toast(f"⚠️ Invalid match ID skipped: {match_id}", "error")
                 continue
             home, away = parts[0].split("-vs-")
-            parsed_date_str, comp = parts[1], parts[2]
     
-            # convert back to datetime
-            try:
-                parsed_date = pd.to_datetime(parsed_date_str)
-            except Exception:
-                parsed_date = None
-    
-            match = df[
-                (df.Home == home) &
-                (df.Away == away) &
-                (df.ParsedDate == parsed_date) &
-                (df.Competition == comp)
+            match = results_df[
+                (results_df.Home == home) &
+                (results_df.Away == away) &
             ]
 
             if not match.empty:
@@ -245,7 +245,7 @@ else:
     for row in display_rows:
         grouped[row.Competition].append(row)
 
-    for comp in LEAGUE_LINKS.keys():
+    for comp in FIXTURE_LINKS.keys():
         if comp not in grouped:
             continue
         st.subheader(f"🏆 {comp}")
@@ -255,25 +255,6 @@ else:
         )
         for row in matches:
             display_match(row)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
