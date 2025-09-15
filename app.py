@@ -224,9 +224,6 @@ else:
         try:
             parts = match_id.split("_")
             st.write(parts)
-            if len(parts) < 3:
-                trigger_toast(f"⚠️ Invalid match ID skipped: {match_id}", "error")
-                continue
             home, away = parts[0].split("-vs-")
             st.write(home)
             st.write(away)
@@ -258,6 +255,7 @@ else:
         )
         for row in matches:
             display_match(row)
+
 
 
 
