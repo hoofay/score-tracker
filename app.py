@@ -230,7 +230,7 @@ else:
     
             match = results_df[
                 (results_df.Home == home) &
-                (results_df.Away == away) &
+                (results_df.Away == away)
             ]
 
             if not match.empty:
@@ -255,6 +255,7 @@ else:
         )
         for row in matches:
             display_match(row)
+
 
 
 
