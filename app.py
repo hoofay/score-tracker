@@ -217,7 +217,7 @@ else:
     df1 = fetch_matches(FIXTURE_LINKS)
     df2 = fetch_matches(RESULT_LINKS)
     results_df = pd.concat([df1, df2])
-    results_df = result_df.drop_duplicates(subset=['home', 'away'], keep='first')
+    results_df = results_df.drop_duplicates(subset=['home', 'away'], keep='first')
 
     display_rows = []
     for match_id in st.session_state.selected_matches_temp:
@@ -255,6 +255,7 @@ else:
         )
         for row in matches:
             display_match(row)
+
 
 
 
