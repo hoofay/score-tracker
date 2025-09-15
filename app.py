@@ -219,7 +219,7 @@ else:
     results_df = pd.concat([df1, df2])
     
     st.write(results_df)
-    results_df = results_df.drop_duplicates(subset=['home', 'away'], keep='first')
+    results_df = results_df.drop_duplicates(subset=['Home', 'Away'], keep='first')
     
     display_rows = []
     for match_id in st.session_state.selected_matches_temp:
@@ -257,6 +257,7 @@ else:
         )
         for row in matches:
             display_match(row)
+
 
 
 
