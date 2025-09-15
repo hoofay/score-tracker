@@ -223,10 +223,7 @@ else:
     for match_id in st.session_state.selected_matches_temp:
         try:
             parts = match_id.split("_")
-            st.write(parts)
             home, away = parts[0].split("-vs-")
-            st.write(home)
-            st.write(away)
             
             match = results_df[
                 (results_df.Home == home) &
@@ -255,6 +252,7 @@ else:
         )
         for row in matches:
             display_match(row)
+
 
 
 
