@@ -215,7 +215,7 @@ else:
         st_autorefresh(interval=60000, key="refresh")
 
     df1 = fetch_matches(FIXTURE_LINKS)
-    df2 = fetch_matches(RESULTS_LINKS)
+    df2 = fetch_matches(RESULT_LINKS)
     results_df = pd.concat([df1, df2])
     results_df = result_df.drop_duplicates(subset=['home', 'away'], keep='first')
 
@@ -255,6 +255,7 @@ else:
         )
         for row in matches:
             display_match(row)
+
 
 
 
