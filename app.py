@@ -40,8 +40,15 @@ st.markdown("""
         box-shadow: 0 6px 16px rgba(0,0,0,0.6);
     }
 
-    .team { font-weight: 600; font-size: 1.2rem; }
-    .score { font-size: 1.6rem; font-weight: bold; margin: 0.25rem 0; }
+    .team { font-weight: 600; font-size: 1.2rem; text-align: center; }
+    .score { 
+    font-size: 1.6rem; 
+    font-weight: bold; 
+    margin: 0.25rem 0; 
+    text-align: center; 
+    display: flex; 
+    justify-content: center; 
+    }
     .status { font-size: 0.9rem; color: #9ca3af; }
     .time { font-size: 0.8rem; color: #6b7280; }
 
@@ -248,6 +255,7 @@ else:
         )
         for row in matches:
             display_match(row)
+
 
 
 
