@@ -8,11 +8,18 @@ import pytz
 from dateutil import parser as dtparser
 
 # --- League links ---
-LEAGUE_LINKS = {
+FIXTURE_LINKS = {
     "Premier League": "https://onefootball.com/en/competition/premier-league-9/fixtures",
     "Championship": "https://onefootball.com/en/competition/efl-championship-27/fixtures",
     "League 1": "https://onefootball.com/en/competition/efl-league-one-42/fixtures",
     "League 2": "https://onefootball.com/en/competition/efl-league-two-43/fixtures"
+}
+
+RESULT_LINKS = {
+    "Premier League": "https://onefootball.com/en/competition/premier-league-9/results",
+    "Championship": "https://onefootball.com/en/competition/efl-championship-27/results",
+    "League 1": "https://onefootball.com/en/competition/efl-league-one-42/results",
+    "League 2": "https://onefootball.com/en/competition/efl-league-two-43/results"
 }
 
 # --- Timezones ---
@@ -113,7 +120,7 @@ def extract_timestamp_from_element(el, source_tz=us_tz):
     return parse_timestamp(raw_text, source_tz=source_tz)
 
 # --- Fetch matches ---
-def fetch_matches():
+def fetch_matches(LEAGUE_LINKS):
     """
     Scrape fixtures and results for the four English leagues.
     Returns a DataFrame with columns:
@@ -174,10 +181,10 @@ def fetch_matches():
 
 # --- Status / ID / Display ---
 def get_status(row):
-    if row.HG != "-" and row.AG != "-":
-        return "Finished", "🔵"
-    elif "'" in row.Date_Time or "Half time" in row.Date_Time:
+    if "'" in row.Date_Time or "Half time" in row.Date_Time:
         return "Live", "🟢"
+    elif row.HG != "-" and row.AG != "-":
+        return "Finished", "🔵"
     else:
         return "Upcoming", "⚪"
 
@@ -189,8 +196,8 @@ def build_match_id(row):
     """
     Stable match identifier using Home-Away, ISO formatted ParsedDate, Competition
     """
-    dt_str = row.ParsedDate.isoformat() if pd.notna(row.ParsedDate) else "TBD"
-    return f"{row.Home}-vs-{row.Away}_{dt_str}_{row.Competition}"
+    # dt_str = row.ParsedDate.isoformat() if pd.notna(row.ParsedDate) else "TBD"
+    return f"{row.Home}-vs-{row.Away}" #_{dt_str}_{row.Competition}"
 
 def trigger_toast(message: str, toast_type: str = "info"):
     st.markdown(
