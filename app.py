@@ -217,19 +217,20 @@ else:
     df1 = fetch_matches(FIXTURE_LINKS)
     df2 = fetch_matches(RESULT_LINKS)
     results_df = pd.concat([df1, df2])
-    
-    st.write(results_df)
     results_df = results_df.drop_duplicates(subset=['Home', 'Away'], keep='first')
     
     display_rows = []
     for match_id in st.session_state.selected_matches_temp:
         try:
             parts = match_id.split("_")
+            st.write(parts)
             if len(parts) < 3:
                 trigger_toast(f"⚠️ Invalid match ID skipped: {match_id}", "error")
                 continue
             home, away = parts[0].split("-vs-")
-    
+            st.write(home)
+            st.write(away)
+            
             match = results_df[
                 (results_df.Home == home) &
                 (results_df.Away == away)
@@ -257,6 +258,7 @@ else:
         )
         for row in matches:
             display_match(row)
+
 
 
 
